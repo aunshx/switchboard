@@ -1,0 +1,1755 @@
+================================================================================
+MCP TOOL DEFINITIONS - SMITHERY.AI
+Source: registry.smithery.ai
+Generated: 2026-04-07
+================================================================================
+
+================================================================================
+1. GMAIL (20 tools)
+   Server: gmail | smithery.ai/server/gmail
+================================================================================
+
+GMAIL_ADD_LABEL_TO_EMAIL
+  Description: Adds and/or removes specified gmail labels for a message; ensure message id and all label ids are valid
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - message_id (string, required): Immutable message identifier
+    - add_label_ids (array): Label IDs to add; default []
+    - remove_label_ids (array): Label IDs to remove; default []
+
+GMAIL_CREATE_EMAIL_DRAFT
+  Description: Creates a gmail email draft, supporting to/cc/bcc, subject, plain/html body
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - recipient_email (string, required): Primary recipient
+    - extra_recipients (array): Additional 'To' addresses; default []
+    - cc (array): Carbon copy recipients; default []
+    - bcc (array): Blind carbon copy recipients; default []
+    - subject (string, required): Email subject line
+    - body (string, required): Email content (plain text or HTML)
+    - is_html (boolean): True if body is HTML; default false
+    - thread_id (string|null): Existing thread ID for replies
+    - attachment (object|null): File with name, s3key, mimetype
+
+GMAIL_CREATE_LABEL
+  Description: Creates a new label with a unique name in the specified user's gmail account
+  Parameters:
+    - user_id (string): User's email; default "me"
+    - label_name (string, required): Unique label name (max 225 chars)
+    - text_color (string|null): Hex color code
+    - background_color (string|null): Hex color code
+    - label_list_visibility (string): labelShow/labelShowIfUnread/labelHide; default "labelShow"
+    - message_list_visibility (string): show/hide; default "show"
+
+GMAIL_DELETE_DRAFT
+  Description: Permanently deletes a specific gmail draft using its id
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - draft_id (string, required): Immutable draft identifier
+
+GMAIL_DELETE_MESSAGE
+  Description: Permanently deletes a specific email message by its id from a gmail mailbox
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - message_id (string, required): Email message identifier
+
+GMAIL_FETCH_EMAILS
+  Description: Fetches a list of email messages from a gmail account, supporting filtering, pagination, and optional full content retrieval
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - query (string|null): Gmail search query (from:, subject:, label:, etc.)
+    - label_ids (array): Filter by specific labels
+    - max_results (integer): 1-500 messages per page; default 1
+    - page_token (string|null): Pagination token
+    - verbose (boolean): True for detailed fetching; default true
+    - ids_only (boolean): True for message IDs only; default false
+    - include_payload (boolean): Include full message payload; default true
+    - include_spam_trash (boolean): Include spam/trash messages; default false
+
+GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID
+  Description: Fetches a specific email message by its id, provided the message id exists and is accessible
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - message_id (string, required): Unique message identifier
+    - format (string): minimal/full/raw/metadata; default "full"
+
+GMAIL_FETCH_MESSAGE_BY_THREAD_ID
+  Description: Retrieves messages from a gmail thread using its thread id
+  Parameters:
+    - user_id (string): User's email; default "me"
+    - thread_id (string, required): Unique thread identifier
+    - page_token (string): Pagination token; default ""
+
+GMAIL_GET_ATTACHMENT
+  Description: Retrieves a specific attachment by id from a message in a user's gmail mailbox
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - message_id (string, required): Message containing attachment
+    - attachment_id (string, required): Specific attachment identifier
+    - file_name (string, required): Desired filename for download
+
+GMAIL_GET_CONTACTS
+  Description: Fetches contacts (connections) for the authenticated google account
+  Parameters:
+    - resource_name (string): Person resource identifier; default "people/me"
+    - person_fields (string): Comma-separated fields to retrieve; default "emailAddresses,names,birthdays,genders"
+    - page_token (string|null): Pagination token
+    - include_other_contacts (boolean): Include interacted-with contacts; default true
+
+GMAIL_GET_PEOPLE
+  Description: Retrieves either a specific person's details or lists 'other contacts'
+  Parameters:
+    - resource_name (string): Person resource identifier; default "people/me"
+    - person_fields (string): Field mask for returned data; default "emailAddresses,names,birthdays,genders"
+    - other_contacts (boolean): Retrieve 'Other Contacts'; default false
+    - page_size (integer): Results per page (1-1000); default 10
+    - page_token (string): Pagination token; default ""
+    - sync_token (string): Token for syncing changes; default ""
+
+GMAIL_GET_PROFILE
+  Description: Retrieves key gmail profile information (email address, message/thread totals, history id)
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+
+GMAIL_LIST_DRAFTS
+  Description: Retrieves a paginated list of email drafts from a user's gmail account
+  Parameters:
+    - user_id (string): User's mailbox ID or 'me'; default "me"
+    - verbose (boolean): True for full details; default false
+    - max_results (integer): 1-500 drafts per page; default 1
+    - page_token (string): Pagination token; default ""
+
+GMAIL_LIST_LABELS
+  Description: Retrieves a list of all system and user-created labels for the specified gmail account
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+
+GMAIL_LIST_THREADS
+  Description: Retrieves a list of email threads from a gmail account, supporting filtering and pagination
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - query (string): Gmail search query filter; default ""
+    - verbose (boolean): True for complete message details; default false
+    - max_results (integer): 1-500 threads per page; default 10
+    - page_token (string): Pagination token; default ""
+
+GMAIL_MODIFY_THREAD_LABELS
+  Description: Adds or removes specified existing label ids from a gmail thread, affecting all its messages
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - thread_id (string, required): Immutable thread identifier
+    - add_label_ids (array|null): Labels to add
+    - remove_label_ids (array|null): Labels to remove
+
+GMAIL_MOVE_TO_TRASH
+  Description: Moves an existing, non-deleted email message to the trash for the specified user
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - message_id (string, required): Message identifier
+
+GMAIL_PATCH_LABEL
+  Description: Patches the specified label
+  Parameters:
+    - userId (string, required): User's email or 'me'
+    - id (string, required): Label ID to update
+    - name (string|null): Updated display name
+    - labelListVisibility (string|null): labelShow/labelShowIfUnread/labelHide
+    - messageListVisibility (string|null): show/hide
+    - color (object|null): Contains textColor and backgroundColor (hex)
+
+GMAIL_REMOVE_LABEL
+  Description: Permanently deletes a specific, existing user-created gmail label by its id
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - label_id (string, required): User-created label identifier
+
+GMAIL_REPLY_TO_THREAD
+  Description: Sends a reply within a specific gmail thread using the original thread's subject
+  Parameters:
+    - user_id (string): User's email or 'me'; default "me"
+    - thread_id (string, required): Gmail thread identifier
+    - recipient_email (string, required): Primary recipient
+    - extra_recipients (array): Additional 'To' recipients; default []
+    - cc (array): CC recipients; default []
+    - bcc (array): BCC recipients; default []
+    - message_body (string, required): Reply content (plain text or HTML)
+    - is_html (boolean): True if message_body is HTML; default false
+    - attachment (object|null): File with name, s3key, mimetype
+
+
+================================================================================
+2. GOOGLE CALENDAR (29 tools)
+   Server: googlecalendar | smithery.ai/server/googlecalendar
+================================================================================
+
+GOOGLECALENDAR_ACL_PATCH
+  Description: Updates an access control rule for a calendar using patch semantics
+  Parameters:
+    - role (string|null): Permission level - "none", "freeBusyReader", "reader", "writer", "owner"
+    - scope (object|null): Access extent with type ("default", "user", "group", "domain") and optional value
+    - rule_id (string, required): ACL identifier (e.g., "user:test.user@example.com")
+    - calendar_id (string, required): Calendar ID or "primary"
+    - send_notifications (boolean|null): Whether to notify of sharing changes
+
+GOOGLECALENDAR_CALENDAR_LIST_INSERT
+  Description: Inserts an existing calendar into the user's calendar list
+  Parameters:
+    - id (string, required): Calendar identifier
+    - hidden (boolean|null): Hide from list (default: false)
+    - color_id (string|null): Color palette reference
+    - selected (boolean|null): Visibility status (default: true)
+    - background_color (string|null): Hex color code
+    - color_rgb_format (boolean|null): Use RGB format
+    - foreground_color (string|null): Hex foreground
+    - summary_override (string|null): Custom calendar name
+    - default_reminders (array|null): EventReminder objects
+    - notification_settings (object|null): Notification configuration
+
+GOOGLECALENDAR_CALENDAR_LIST_UPDATE
+  Description: Updates an existing entry on the user's calendar list
+  Parameters:
+    - calendar_id (string, required): Actual calendar ID (not "primary")
+    - hidden (boolean|null): Hide status
+    - colorId (string|null): Color identifier
+    - selected (boolean|null): Display in UI
+    - colorRgbFormat (boolean|null): RGB format flag
+    - backgroundColor (string|null): Hex background
+    - foregroundColor (string|null): Hex foreground
+    - summaryOverride (string|null): User-set name
+    - defaultReminders (array|null): Reminder objects
+    - notificationSettings (object|null): Notification setup
+
+GOOGLECALENDAR_CALENDARS_DELETE
+  Description: Deletes a secondary calendar (use clear for primary calendars)
+  Parameters:
+    - calendar_id (string, required): Calendar to delete
+
+GOOGLECALENDAR_CALENDARS_UPDATE
+  Description: Updates metadata for a calendar
+  Parameters:
+    - summary (string, required): Calendar title
+    - calendarId (string, required): Calendar identifier
+    - location (string|null): Geographic location
+    - timeZone (string|null): IANA timezone name
+    - description (string|null): Calendar description
+
+GOOGLECALENDAR_CLEAR_CALENDAR
+  Description: Clears a primary calendar. This operation deletes all events associated with the primary calendar
+  Parameters:
+    - calendar_id (string, required): Target calendar (typically "primary")
+
+GOOGLECALENDAR_CREATE_EVENT
+  Description: Create a Google Calendar event using start_datetime plus event_duration_hour and event_duration_minutes fields
+  Parameters:
+    - summary (string|null): Event title
+    - location (string|null): Physical/virtual location
+    - timezone (string|null): IANA timezone
+    - attendees (array|null): Attendee email strings
+    - eventType (enum): "birthday", "default", "focusTime", "outOfOffice", "workingLocation"
+    - recurrence (array|null): RRULE/EXRULE lines
+    - visibility (enum): "default", "public", "private", "confidential"
+    - calendar_id (string, default: "primary"): Target calendar
+    - description (string|null): Event description (HTML allowed)
+    - send_updates (boolean|null): Notify attendees
+    - transparency (enum): "opaque" or "transparent"
+    - start_datetime (string, required): YYYY-MM-DDTHH:MM:SS format
+    - exclude_organizer (boolean, default: false): Exclude organizer as attendee
+    - guests_can_modify (boolean, default: false): Modification permission
+    - event_duration_hour (integer, 0-24, default: 0): Hours
+    - event_duration_minutes (integer, 0-59, default: 30): Minutes
+    - create_meeting_room (boolean|null): Add Google Meet link
+    - birthdayProperties (object|null): Birthday event config
+    - focusTimeProperties (object|null): Focus time settings
+    - outOfOfficeProperties (object|null): Out-of-office config
+    - workingLocationProperties (object|null): Work location details
+    - guestsCanInviteOthers (boolean|null): Invitation permission
+    - guestsCanSeeOtherGuests (boolean|null): Attendee visibility
+
+GOOGLECALENDAR_DELETE_EVENT
+  Description: Deletes a specified event (idempotent, raises 404 if not found)
+  Parameters:
+    - event_id (string, required): Event identifier
+    - calendar_id (string, default: "primary"): Source calendar
+
+GOOGLECALENDAR_DUPLICATE_CALENDAR
+  Description: Creates a new, empty Google Calendar with specified title
+  Parameters:
+    - summary (string, required, minLength: 1): New calendar name
+
+GOOGLECALENDAR_EVENTS_INSTANCES
+  Description: Returns instances of the specified recurring event
+  Parameters:
+    - eventId (string, required): Recurring event ID
+    - calendarId (string, required): Calendar identifier
+    - timeMin (string|null): Lower bound (RFC3339 with timezone)
+    - timeMax (string|null): Upper bound (RFC3339 with timezone)
+    - timeZone (string|null): Response timezone
+    - maxResults (integer|null, 1-2500): Results per page
+    - pageToken (string|null): Pagination token
+    - showDeleted (boolean|null): Include cancelled instances
+    - maxAttendees (integer|null): Attendee limit
+    - originalStart (string|null): Instance original start time
+
+GOOGLECALENDAR_EVENTS_LIST
+  Description: Returns events on the specified calendar
+  Parameters:
+    - calendarId (string, required): Calendar identifier
+    - q (string|null): Free text search
+    - iCalUID (string|null): iCalendar format event ID
+    - orderBy (string|null): "startTime" or "updated"
+    - timeMin (string|null): RFC3339 lower bound
+    - timeMax (string|null): RFC3339 upper bound
+    - timeZone (string|null): Response timezone
+    - maxResults (integer|null): Results limit
+    - pageToken (string|null): Pagination token
+    - syncToken (string|null): Incremental sync token
+    - eventTypes (string|null): Filter by event type
+    - updatedMin (string|null): Last modification lower bound
+    - showDeleted (boolean|null): Include cancelled events
+    - maxAttendees (integer|null, >=1): Attendee limit
+    - singleEvents (boolean|null): Expand recurring events
+    - alwaysIncludeEmail (boolean|null): Deprecated
+    - showHiddenInvitations (boolean|null): Include hidden invitations
+    - sharedExtendedProperty (string|null): Extended property constraint
+    - privateExtendedProperty (string|null): Private property constraint
+
+GOOGLECALENDAR_EVENTS_MOVE
+  Description: Moves an event to another calendar (changes organizer)
+  Parameters:
+    - event_id (string, required): Event identifier
+    - calendar_id (string, required): Source calendar
+    - destination (string, required): Target calendar
+    - send_updates (string|null): "all", "externalOnly", or "none"
+
+GOOGLECALENDAR_EVENTS_WATCH
+  Description: Watch for changes to Events resources
+  Parameters:
+    - calendarId (string, required): Calendar identifier
+    - id (string, required): Channel UUID
+    - type (string, default: "web_hook"): Delivery mechanism
+    - address (string, required): Notification address
+    - token (string|null): Arbitrary delivery string
+    - params (object|null): Delivery channel behavior
+    - payload (boolean|null): Include payload flag
+
+GOOGLECALENDAR_FIND_EVENT
+  Description: Finds events in a specified Google Calendar using text query, time ranges, and event types
+  Parameters:
+    - calendar_id (string, default: "primary"): Target calendar
+    - query (string|null): Free-text search terms
+    - timeMin (string|null): Lower bound (multiple formats accepted)
+    - timeMax (string|null): Upper bound (multiple formats accepted)
+    - order_by (string|null): "startTime" or "updated"
+    - event_types (array, default: all types): Filter by type
+    - max_results (integer, default: 10): Results per page
+    - page_token (string|null): Pagination token
+    - updated_min (string|null): Last modification lower bound
+    - show_deleted (boolean|null): Include cancelled events
+    - single_events (boolean, default: true): Expand recurring events
+
+GOOGLECALENDAR_FIND_FREE_SLOTS
+  Description: Finds both free and busy time slots in Google Calendars for specified calendars within a defined time range
+  Parameters:
+    - items (array, default: ["primary"]): Calendar identifiers
+    - time_min (string|null): Start datetime
+    - time_max (string|null): End datetime
+    - timezone (string, default: "UTC"): IANA timezone
+    - group_expansion_max (integer, default: 100): Max group calendars
+    - calendar_expansion_max (integer, default: 50): Max calendars for FreeBusy
+
+GOOGLECALENDAR_FREE_BUSY_QUERY
+  Description: Returns free/busy information for a set of calendars
+  Parameters:
+    - items (array, required): FreeBusyQueryItem objects with id
+    - timeMin (string, required): RFC3339 start interval
+    - timeMax (string, required): RFC3339 end interval
+    - timeZone (string|null): Response timezone
+    - groupExpansionMax (integer|null): Max group members (max 100)
+    - calendarExpansionMax (integer|null): Max calendars (max 50)
+
+GOOGLECALENDAR_GET_CALENDAR
+  Description: Retrieves a specific Google Calendar accessible to authenticated user
+  Parameters:
+    - calendar_id (string, default: "primary"): Calendar identifier
+
+GOOGLECALENDAR_GET_CURRENT_DATE_TIME
+  Description: Gets the current date and time with optional timezone offset
+  Parameters:
+    - timezone (number, default: 0): UTC offset in hours
+
+GOOGLECALENDAR_LIST_ACL_RULES
+  Description: Retrieves the list of access control rules (ACLs) for a specified calendar
+  Parameters:
+    - calendar_id (string, required): Calendar identifier
+    - max_results (integer|null): Results limit (default: 100)
+    - page_token (string|null): Pagination token
+    - sync_token (string|null): Incremental sync token
+    - show_deleted (boolean|null): Include deleted ACLs
+
+GOOGLECALENDAR_LIST_CALENDARS
+  Description: Retrieves a paginated list of calendars from user's calendar list
+  Parameters:
+    - maxResults (integer, default: 100, max: 250): Results per page
+    - pageToken (string|null): Pagination token
+    - syncToken (string|null): Incremental sync token
+    - showHidden (boolean, default: false): Include hidden calendars
+    - showDeleted (boolean, default: false): Include deleted entries
+    - minAccessRole (enum|null): "freeBusyReader", "owner", "reader", "writer"
+
+GOOGLECALENDAR_PATCH_CALENDAR
+  Description: Partially updates (PATCHes) an existing Google Calendar, modifying only the fields provided
+  Parameters:
+    - calendar_id (string, required): Calendar identifier
+    - summary (string, required): New title (non-empty)
+    - description (string|null): New description
+    - location (string|null): Geographic location
+    - timezone (string|null): IANA timezone
+
+GOOGLECALENDAR_PATCH_EVENT
+  Description: Update specified fields of an existing event using patch semantics
+  Parameters:
+    - calendar_id (string, required): Calendar identifier
+    - event_id (string, required): Event identifier
+    - summary (string|null): New title
+    - start_time (string|null): New start (RFC3339 or YYYY-MM-DD)
+    - end_time (string|null): New end (RFC3339 or YYYY-MM-DD)
+    - location (string|null): New location
+    - description (string|null): New description
+    - attendees (array|null): Email list (replaces existing)
+    - timezone (string|null): IANA timezone
+    - send_updates (string|null): "all", "externalOnly", or "none"
+    - max_attendees (integer|null, >0): Attendee limit
+    - rsvp_response (string|null): "accepted", "declined", "tentative", "needsAction"
+    - supports_attachments (boolean|null): Attachment support flag
+    - conference_data_version (integer|null, 0-1): Conference support version
+
+GOOGLECALENDAR_QUICK_ADD
+  Description: Parses natural language text to quickly create a basic Google Calendar event
+  Parameters:
+    - text (string, default: ""): Natural language event description
+    - calendar_id (string, default: "primary"): Target calendar
+    - send_updates (enum): "all", "externalOnly", or "none"
+
+GOOGLECALENDAR_REMOVE_ATTENDEE
+  Description: Removes an attendee from a specified event
+  Parameters:
+    - calendar_id (string, default: "primary"): Event's calendar
+    - event_id (string, required): Event identifier
+    - attendee_email (string, required, format: email): Email to remove
+
+GOOGLECALENDAR_SETTINGS_LIST
+  Description: Returns all user settings for the authenticated user
+  Parameters:
+    - maxResults (integer|null, 1-250): Results limit
+    - pageToken (string|null): Pagination token
+    - syncToken (string|null): Incremental sync token
+
+GOOGLECALENDAR_SETTINGS_WATCH
+  Description: Watch for changes to Settings resources
+  Parameters:
+    - id (string, required): Channel UUID
+    - type (string, required): "web_hook" or "webhook"
+    - address (string, required): Notification endpoint
+    - token (string|null): Arbitrary delivery string
+    - params (object|null): TTL and delivery controls
+
+GOOGLECALENDAR_SYNC_EVENTS
+  Description: Synchronizes Google Calendar events, performing full or incremental sync
+  Parameters:
+    - calendar_id (string, default: "primary"): Calendar identifier
+    - sync_token (string|null): Incremental sync token
+    - pageToken (string|null): Pagination token
+    - event_types (array|null): Filter by type
+    - max_results (integer|null, max: 2500): Results limit
+    - single_events (boolean|null): Expand recurring events
+
+GOOGLECALENDAR_UPDATE_ACL_RULE
+  Description: Updates an access control rule for the specified calendar
+  Parameters:
+    - calendar_id (string, required): Calendar identifier
+    - rule_id (string, required): ACL rule identifier
+    - role (string, required): "none", "freeBusyReader", "reader", "writer", "owner"
+    - send_notifications (boolean|null, default: true): Notification flag
+
+GOOGLECALENDAR_UPDATE_EVENT
+  Description: Updates an existing event; this is a full PUT replacement
+  Parameters:
+    - calendar_id (string, default: "primary"): Event's calendar
+    - event_id (string, required): Event to update
+    - summary (string|null): Event title
+    - start_datetime (string, required): YYYY-MM-DDTHH:MM:SS format
+    - location (string|null): Event location
+    - description (string|null): Event description
+    - timezone (string|null): IANA timezone
+    - attendees (array|null): Attendee emails
+    - eventType (enum): Event classification
+    - recurrence (array|null): RRULE/EXRULE lines
+    - visibility (enum): "default", "public", "private", "confidential"
+    - transparency (enum): "opaque" or "transparent"
+    - send_updates (boolean|null): Notify attendees
+    - guests_can_modify (boolean, default: false): Edit permission
+    - event_duration_hour (integer, 0-24): Duration hours
+    - event_duration_minutes (integer, 0-59): Duration minutes
+    - create_meeting_room (boolean|null): Add Google Meet
+    - birthdayProperties (object|null): Birthday configuration
+    - focusTimeProperties (object|null): Focus time settings
+    - outOfOfficeProperties (object|null): Out-of-office config
+    - workingLocationProperties (object|null): Work location details
+    - guestsCanInviteOthers (boolean|null): Invitation permission
+    - guestsCanSeeOtherGuests (boolean|null): Attendee visibility
+
+
+================================================================================
+3. SLACK (10 tools)
+   Server: jtalk22/slack-mcp-server | smithery.ai/server/jtalk22/slack-mcp-server
+================================================================================
+
+slack_token_status
+  Description: Check token health, age, and auto-refresh status
+  Parameters: (none)
+
+slack_health_check
+  Description: Check if Slack API connection is working and show workspace info
+  Parameters: (none)
+
+slack_list_conversations
+  Description: List all DMs and channels with user names resolved
+  Parameters:
+    - limit (number): Max results (default 100)
+    - types (string): Comma-separated: public_channel,private_channel,mpim,im
+    - discover_dms (boolean): Actively discover all DMs (slower but complete)
+
+slack_conversations_history
+  Description: Get messages from a channel or DM with user names resolved
+  Parameters:
+    - limit (number): Messages to fetch (max 100, default 50)
+    - latest (string): Unix timestamp - get messages before this time
+    - oldest (string): Unix timestamp - get messages after this time
+    - channel (string): Channel or DM ID (e.g., D063M4403MW)
+
+slack_get_full_conversation
+  Description: Export full conversation history with all messages, threads, and user names
+  Parameters:
+    - latest (string): Unix timestamp end
+    - oldest (string): Unix timestamp start
+    - channel (string): Channel or DM ID
+    - max_messages (number): Maximum messages (default 2000, max 10000)
+    - include_threads (boolean): Fetch thread replies (default true)
+
+slack_search_messages
+  Description: Search messages across the Slack workspace
+  Parameters:
+    - count (number): Number of results (max 100, default 20)
+    - query (string): Search query (supports from:@user, in:#channel)
+
+slack_send_message
+  Description: Send a message to a channel or DM
+  Parameters:
+    - text (string): Message text (supports Slack markdown)
+    - channel (string): Channel or DM ID to send to
+    - thread_ts (string): Thread timestamp to reply to (optional)
+
+slack_get_thread
+  Description: Get all replies in a message thread
+  Parameters:
+    - channel (string): Channel or DM ID
+    - thread_ts (string): Thread parent message timestamp
+
+slack_users_info
+  Description: Get detailed information about a Slack user
+  Parameters:
+    - user (string): Slack user ID
+
+slack_list_users
+  Description: List all users in the workspace with pagination support
+  Parameters:
+    - limit (number): Maximum users to return (default 500)
+
+
+================================================================================
+4. LINEAR (25 tools)
+   Server: linear | smithery.ai/server/linear
+================================================================================
+
+list_comments
+  Description: List comments for a specific Linear issue
+  Parameters:
+    - issueId (string, required): The issue ID
+
+create_comment
+  Description: Create a comment on a specific Linear issue
+  Parameters:
+    - body (string, required): The content of the comment as Markdown
+    - issueId (string, required): The issue ID
+    - parentId (string, optional): A parent comment ID to reply to
+
+list_cycles
+  Description: Retrieve cycles for a specific Linear team
+  Parameters:
+    - type (enum, optional): "current", "previous", "next", or all cycles
+    - teamId (string, required): The team ID
+
+get_document
+  Description: Retrieve a Linear document by ID or slug
+  Parameters:
+    - id (string, required): The document ID or slug
+
+list_documents
+  Description: List documents in the user's Linear workspace
+  Parameters:
+    - after (string, optional): Pagination cursor (after)
+    - before (string, optional): Pagination cursor (before)
+    - limit (number, optional, default 50, max 250): Results to return
+    - query (string, optional): Search query
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+    - createdAt (string, optional): ISO-8601 datetime or duration filter
+    - updatedAt (string, optional): ISO-8601 datetime or duration filter
+    - creatorId (string, optional): Filter by creator ID
+    - projectId (string, optional): Filter by project ID
+    - initiativeId (string, optional): Filter by initiative ID
+    - includeArchived (boolean, optional, default false): Include archived documents
+
+create_document
+  Description: Create a new document in Linear
+  Parameters:
+    - title (string, required): The title
+    - content (string, optional): Markdown content
+    - icon (string, optional): Icon emoji
+    - color (string, optional): Hex color code
+    - project (string, optional): Project name or ID
+
+update_document
+  Description: Update an existing Linear document
+  Parameters:
+    - id (string, required): Document ID
+    - title (string, optional): Updated title
+    - content (string, optional): Updated Markdown content
+    - icon (string, optional): Updated icon emoji
+    - color (string, optional): Updated hex color code
+    - project (string, optional): Updated project name or ID
+
+get_issue
+  Description: Retrieve detailed information about an issue by ID
+  Parameters:
+    - id (string, required): The issue ID
+    - includeRelations (boolean, optional, default false): Include blocking/related/duplicate relations
+
+list_issues
+  Description: List issues in the user's Linear workspace. Use 'me' for personal issues
+  Parameters:
+    - team (string, optional): Team name or ID filter
+    - cycle (string, optional): Cycle filter
+    - label (string, optional): Label filter
+    - state (string, optional): State filter
+    - project (string, optional): Project filter
+    - assignee (string, optional): Assignee filter
+    - delegate (string, optional): Delegate filter
+    - parentId (string, optional): Filter by parent issue
+    - after (string, optional): Pagination cursor (after)
+    - before (string, optional): Pagination cursor (before)
+    - limit (number, optional, default 50, max 250): Results to return
+    - query (string, optional): Search title/description
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+    - createdAt (string, optional): Time filter
+    - updatedAt (string, optional): Time filter
+    - includeArchived (boolean, optional, default true): Include archived issues
+
+create_issue
+  Description: Create a new Linear issue
+  Parameters:
+    - title (string, required): Issue title
+    - team (string, required): Team name or ID
+    - description (string, optional): Markdown description
+    - state (string, optional): Issue state
+    - assignee (string, optional): Assignee
+    - delegate (string, optional): Delegate
+    - cycle (string, optional): Cycle
+    - project (string, optional): Project
+    - milestone (string, optional): Milestone
+    - parentId (string, optional): Parent issue ID (for sub-issues)
+    - priority (number, optional): 0-4 scale
+    - dueDate (string, optional): ISO format date
+    - labels (array, optional): Label names or IDs
+    - links (array, optional): Objects with url and title
+    - blocks (array, optional): Issue IDs this blocks
+    - blockedBy (array, optional): Issue IDs blocking this
+    - relatedTo (array, optional): Related issue IDs
+    - duplicateOf (string, optional): Duplicate relation
+
+update_issue
+  Description: Update an existing Linear issue
+  Parameters:
+    - id (string, required): Issue ID
+    - (All fields from create_issue are optional for updates)
+    - Note: blocks, blockedBy, relatedTo REPLACE existing relations
+    - duplicateOf (string|null, optional): Replace or remove duplicate relation
+
+list_issue_statuses
+  Description: List available issue statuses in a Linear team
+  Parameters:
+    - team (string, required): Team name or ID
+
+get_issue_status
+  Description: Retrieve detailed information about an issue status
+  Parameters:
+    - id (string, optional): Status ID
+    - name (string, optional): Status name
+    - team (string, optional): Team name or ID
+
+list_issue_labels
+  Description: List available issue labels in workspace or team
+  Parameters:
+    - name (string, optional): Filter by label name
+    - team (string, optional): Team name or ID
+    - after (string, optional): Pagination cursor
+    - before (string, optional): Pagination cursor
+    - limit (number, optional, default 50, max 250): Results
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+
+create_issue_label
+  Description: Create a new Linear issue label
+  Parameters:
+    - name (string, required): Label name
+    - color (string, optional): Hex color code
+    - teamId (string, optional): Team UUID; omit for workspace label
+    - isGroup (boolean, optional, default false): Label group flag
+    - parentId (string, optional): Parent label UUID for child labels
+    - description (string, optional): Label description
+
+list_projects
+  Description: List projects in the user's Linear workspace
+  Parameters:
+    - team (string, optional): Team filter
+    - state (string, optional): State filter
+    - member (string, optional): Member filter
+    - initiative (string, optional): Initiative filter
+    - after (string, optional): Pagination cursor
+    - before (string, optional): Pagination cursor
+    - limit (number, optional, default 50, max 250): Results
+    - query (string, optional): Search project names
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+    - createdAt (string, optional): Time filter
+    - updatedAt (string, optional): Time filter
+    - includeArchived (boolean, optional, default false): Include archived
+
+get_project
+  Description: Retrieve details of a specific project in Linear
+  Parameters:
+    - query (string, required): Project ID or name
+
+create_project
+  Description: Create a new project in Linear
+  Parameters:
+    - name (string, required): Project name
+    - team (string, required): Team name or ID
+    - lead (string, optional): User ID, name, email, or "me"
+    - summary (string, optional): Plaintext summary (max 255 chars)
+    - description (string, optional): Markdown description
+    - state (string, optional): Project state
+    - priority (integer, optional, 0-4): Priority level
+    - icon (string, optional): Icon emoji
+    - color (string, optional): Hex color
+    - labels (array, optional): Label names or IDs
+    - startDate (string, optional): ISO format date
+    - targetDate (string, optional): ISO format date
+    - initiative (string, optional): Initiative ID or name
+
+update_project
+  Description: Update an existing Linear project
+  Parameters:
+    - id (string, required): Project ID
+    - (All create_project fields optional except id)
+    - initiatives (array, optional): Initiative IDs or names (replaces existing)
+
+list_project_labels
+  Description: List available project labels in the Linear workspace
+  Parameters:
+    - name (string, optional): Filter by label name
+    - after (string, optional): Pagination cursor
+    - before (string, optional): Pagination cursor
+    - limit (number, optional, default 50, max 250): Results
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+
+list_teams
+  Description: List teams in the user's Linear workspace
+  Parameters:
+    - after (string, optional): Pagination cursor
+    - before (string, optional): Pagination cursor
+    - limit (number, optional, default 50, max 250): Results
+    - query (string, optional): Search query
+    - orderBy (enum, optional, default "updatedAt"): "createdAt" or "updatedAt"
+    - createdAt (string, optional): Time filter
+    - updatedAt (string, optional): Time filter
+    - includeArchived (boolean, optional, default false): Include archived
+
+get_team
+  Description: Retrieve details of a specific Linear team
+  Parameters:
+    - query (string, required): Team UUID, key, or name
+
+list_users
+  Description: Retrieve users in the Linear workspace
+  Parameters:
+    - team (string, optional): Team name or ID for filtering members
+    - query (string, optional): Filter users by name or email
+
+get_user
+  Description: Retrieve details of a specific Linear user
+  Parameters:
+    - query (string, required): User ID, name, email, or "me"
+
+search_documentation
+  Description: Search Linear's documentation to learn about features and usage
+  Parameters:
+    - query (string, required): Search query
+    - page (number, optional, default 0): Page number
+
+
+================================================================================
+5. PERPLEXITY (1 tool)
+   Server: arjunkmrm/perplexity-search | smithery.ai/server/arjunkmrm/perplexity-search
+================================================================================
+
+search
+  Description: Perform a web search using Perplexity's API, which provides detailed and contextually relevant results with citations
+  Parameters:
+    - query (string, required): The search query to perform
+    - search_recency_filter (enum, optional): Filter results by recency. Values: "month", "week", "day", "hour". No time filtering when unspecified.
+
+
+================================================================================
+6. GITHUB (86 tools)
+   Server: github | smithery.ai/server/github
+================================================================================
+
+--- Actions Management ---
+
+actions_get
+  Description: Retrieves details about GitHub Actions resources (workflows, runs, jobs, artifacts)
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - method (string): get_workflow, get_workflow_run, get_workflow_job, download_workflow_run_artifact, get_workflow_run_usage, get_workflow_run_logs_url
+    - resource_id (string): Resource identifier
+
+actions_list
+  Description: Lists GitHub Actions resources with filtering and pagination
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - method (string): list_workflows, list_workflow_runs, list_workflow_jobs, list_workflow_run_artifacts
+    - resource_id (string): Resource identifier
+    - page (integer): Page number
+    - per_page (integer): Results per page
+    - workflow_jobs_filter (string): Filter for workflow jobs
+    - workflow_runs_filter (string): Filter for workflow runs
+
+actions_run_trigger
+  Description: Executes workflow operations (run, rerun, cancel, delete logs)
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - workflow_id (string): Workflow identifier
+    - ref (string): Git reference (branch/tag)
+    - run_id (string): Run identifier
+    - inputs (object): Workflow inputs
+    - method (string): run_workflow, rerun_workflow_run, rerun_failed_jobs, cancel_workflow_run, delete_workflow_run_logs
+
+--- Pull Request Operations ---
+
+add_comment_to_pending_review
+  Description: Adds comments to existing pending PR reviews
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - path (string, required): File path
+    - line (integer, required): Line number
+    - body (string, required): Comment body
+    - side (string, required): "LEFT" or "RIGHT"
+
+add_reply_to_pull_request_comment
+  Description: Replies to specific PR comments
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - commentId (integer, required): Comment ID
+    - body (string, required): Reply body
+
+create_pull_request
+  Description: Creates new PRs with customizable options
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - base (string, required): Base branch
+    - head (string, required): Head branch
+    - title (string, required): PR title
+    - body (string, optional): PR description
+    - draft (boolean, optional): Create as draft
+    - maintainer_can_modify (boolean, optional): Allow maintainer edits
+
+create_pull_request_with_copilot
+  Description: Delegates implementation tasks to GitHub Copilot
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - title (string, required): PR title
+    - problem_statement (string, required): Task description
+    - base_ref (string, optional): Base branch reference
+
+merge_pull_request
+  Description: Merges PRs with specified merge strategy
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - merge_method (string, optional): merge, squash, or rebase
+    - commit_title (string, optional): Merge commit title
+    - commit_message (string, optional): Merge commit message
+
+pull_request_read
+  Description: Retrieves PR data and metadata
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - method (string): get, get_diff, get_status, get_files, get_review_comments, get_reviews, get_comments, get_check_runs
+
+pull_request_review_write
+  Description: Creates, submits, or deletes PR reviews
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - method (string): create, submit_pending, delete_pending
+
+update_pull_request
+  Description: Modifies existing PR properties
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+    - title (string, optional): Updated title
+    - body (string, optional): Updated description
+    - state (string, optional): open or closed
+    - base (string, optional): Updated base branch
+    - draft (boolean, optional): Draft status
+    - reviewers (array, optional): Reviewer usernames
+    - maintainer_can_modify (boolean, optional): Allow maintainer edits
+
+update_pull_request_branch
+  Description: Syncs PR branch with base branch changes
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+
+list_pull_requests
+  Description: Lists pull requests with filtering
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - state (string, optional): open, closed, all
+    - head (string, optional): Filter by head branch
+    - base (string, optional): Filter by base branch
+    - sort (string, optional): Sort field
+    - direction (string, optional): Sort direction
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+--- Issue Management ---
+
+add_issue_comment
+  Description: Posts comments on issues and PRs
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - issue_number (integer, required): Issue number
+    - body (string, required): Comment body
+
+assign_copilot_to_issue
+  Description: Delegates issue resolution to Copilot agent
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - issue_number (integer, required): Issue number
+    - base_ref (string, optional): Base branch reference
+    - custom_instructions (string, optional): Custom instructions
+
+issue_read
+  Description: Retrieves issue information and related data
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - issue_number (integer, required): Issue number
+    - method (string): get, get_comments, get_sub_issues, get_labels
+
+issue_write
+  Description: Creates or updates issues with metadata
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - method (string): create, update
+    - title (string): Issue title
+    - body (string): Issue body
+    - labels (array, optional): Label names
+    - assignees (array, optional): Assignee usernames
+    - milestone (integer, optional): Milestone number
+    - state (string, optional): open or closed
+    - state_reason (string, optional): Reason for state change
+    - type (string, optional): Issue type
+
+list_issues
+  Description: Lists repository issues with filtering
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - state (string, optional): open, closed, all
+    - labels (string, optional): Comma-separated label names
+    - sort (string, optional): Sort field
+    - direction (string, optional): Sort direction
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+sub_issue_write
+  Description: Manages issue hierarchies
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - issue_number (integer, required): Parent issue number
+    - method (string): add, remove, reprioritize
+
+triage_issue
+  Description: Categorizes issues with rationale and metadata
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - issue_number (integer, required): Issue number
+    - triage_rationale (string, required): Rationale for categorization
+    - labels (array, optional): Labels to apply
+    - type (string, optional): Issue type
+    - fields (object, optional): Custom fields
+
+list_issue_types
+  Description: Lists organization issue types
+  Parameters:
+    - owner (string, required): Organization name
+
+--- Code and File Operations ---
+
+create_branch
+  Description: Creates repository branches
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - branch (string, required): New branch name
+    - from_branch (string, optional): Source branch
+
+create_or_update_file
+  Description: Creates/modifies single files with commit control
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - path (string, required): File path
+    - branch (string, required): Target branch
+    - content (string, required): File content
+    - message (string, required): Commit message
+    - sha (string, optional): Required for updates
+
+delete_file
+  Description: Removes files from repository
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - path (string, required): File path
+    - branch (string, required): Target branch
+    - message (string, required): Commit message
+
+get_file_contents
+  Description: Retrieves file/directory contents
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - path (string, optional): File or directory path
+    - ref (string, optional): Git reference
+    - sha (string, optional): Commit SHA
+
+get_repository_tree
+  Description: Displays repository structure
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - tree_sha (string, optional): Tree SHA (default: HEAD)
+    - recursive (boolean, optional): Recursive listing
+    - path_filter (string, optional): Filter by path prefix
+
+push_files
+  Description: Commits multiple files in single operation
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - branch (string, required): Target branch
+    - message (string, required): Commit message
+    - files (array, required): Array of {path, content} objects
+
+search_code
+  Description: Searches across all repositories using GitHub syntax
+  Parameters:
+    - query (string, required): Search query
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+
+--- Repository Management ---
+
+create_repository
+  Description: Initializes new repositories
+  Parameters:
+    - name (string, required): Repository name
+    - private (boolean, optional): Private repo flag
+    - description (string, optional): Repo description
+    - autoInit (boolean, optional): Initialize with README
+    - organization (string, optional): Org owner
+
+fork_repository
+  Description: Creates repository copies
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - organization (string, optional): Target organization
+
+star_repository
+  Description: Marks repositories as favorites
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+unstar_repository
+  Description: Removes favorite status
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+list_starred_repositories
+  Description: Lists user's starred repositories
+  Parameters:
+    - sort (string, optional): Sort field
+    - direction (string, optional): Sort direction
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+get_latest_release
+  Description: Retrieves most recent release
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+--- Notifications ---
+
+dismiss_notification
+  Description: Updates notification status
+  Parameters:
+    - threadID (string, required): Notification thread ID
+    - state (string, required): read or done
+
+get_notification_details
+  Description: Retrieves specific notification info
+  Parameters:
+    - notificationID (string, required): Notification ID
+
+list_notifications
+  Description: Lists all notifications with filtering
+  Parameters:
+    - repo (string, optional): Repository name
+    - owner (string, optional): Repository owner
+    - since (string, optional): ISO timestamp filter
+    - before (string, optional): ISO timestamp filter
+    - filter (string, optional): Filter type
+    - perPage (integer, optional): Results per page
+    - page (integer, optional): Page number
+
+manage_notification_subscription
+  Description: Controls notification subscriptions
+  Parameters:
+    - notificationID (string, required): Notification ID
+    - action (string, required): ignore, watch, or delete
+
+manage_repository_notification_subscription
+  Description: Repository-level notification control
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - action (string, required): ignore, watch, or unwatch
+
+mark_all_notifications_read
+  Description: Marks notifications as read
+  Parameters:
+    - repo (string, optional): Repository name
+    - owner (string, optional): Repository owner
+    - lastReadAt (string, optional): ISO timestamp
+
+--- Security and Scanning ---
+
+get_code_scanning_alert
+  Description: Retrieves specific code scanning alerts
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - alertNumber (integer, required): Alert number
+
+list_code_scanning_alerts
+  Description: Lists code scanning alerts with filtering
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - ref (string, optional): Git reference
+    - state (string, optional): Alert state
+    - severity (string, optional): Severity level
+    - tool_name (string, optional): Tool name filter
+
+get_dependabot_alert
+  Description: Retrieves dependency vulnerability alerts
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - alertNumber (integer, required): Alert number
+
+list_dependabot_alerts
+  Description: Lists dependency alerts with filtering
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - state (string, optional): Alert state
+    - severity (string, optional): Severity level
+
+get_secret_scanning_alert
+  Description: Retrieves exposed credential alerts
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - alertNumber (integer, required): Alert number
+
+list_secret_scanning_alerts
+  Description: Lists secret detection alerts
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - state (string, optional): Alert state
+    - resolution (string, optional): Resolution status
+    - secret_type (string, optional): Secret type filter
+
+run_secret_scanning
+  Description: Scans files for exposed credentials
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - files (array, required): Array of file content objects
+
+--- Releases and Tags ---
+
+get_release_by_tag
+  Description: Retrieves specific release by tag
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - tag (string, required): Tag name
+
+list_releases
+  Description: Lists repository releases with pagination
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+get_tag
+  Description: Retrieves tag information
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - tag (string, required): Tag name
+
+list_tags
+  Description: Lists repository tags
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+--- Commits and History ---
+
+get_commit
+  Description: Retrieves commit details and diffs
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - sha (string, required): Commit SHA
+    - include_diff (boolean, optional): Include diff
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+list_commits
+  Description: Lists commits with filtering options
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - sha (string, optional): Branch/tag/SHA
+    - author (string, optional): Author filter
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+--- Discussions ---
+
+get_discussion
+  Description: Retrieves specific discussion
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - discussionNumber (integer, required): Discussion number
+
+get_discussion_comments
+  Description: Retrieves discussion replies
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - discussionNumber (integer, required): Discussion number
+    - after (string, optional): Pagination cursor
+    - perPage (integer, optional): Results per page
+
+list_discussions
+  Description: Lists discussions with filtering
+  Parameters:
+    - repo (string, optional): Repository name
+    - owner (string, optional): Repository owner
+    - category (string, optional): Category filter
+    - orderBy (string, optional): Sort field
+    - direction (string, optional): Sort direction
+    - perPage (integer, optional): Results per page
+    - after (string, optional): Pagination cursor
+
+list_discussion_categories
+  Description: Lists discussion categories
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+--- Gists ---
+
+create_gist
+  Description: Creates code snippets/gists
+  Parameters:
+    - content (string, required): Gist content
+    - filename (string, required): File name
+    - description (string, optional): Gist description
+    - public (boolean, optional): Public visibility
+
+get_gist
+  Description: Retrieves gist content
+  Parameters:
+    - gist_id (string, required): Gist identifier
+
+list_gists
+  Description: Lists user gists
+  Parameters:
+    - username (string, optional): GitHub username
+    - since (string, optional): ISO timestamp filter
+    - perPage (integer, optional): Results per page
+    - page (integer, optional): Page number
+
+update_gist
+  Description: Modifies existing gist
+  Parameters:
+    - gist_id (string, required): Gist identifier
+    - filename (string, required): File name
+    - content (string, required): Updated content
+    - description (string, optional): Updated description
+
+--- Search ---
+
+search_issues
+  Description: Finds issues using GitHub syntax
+  Parameters:
+    - repo (string, optional): Repository name
+    - owner (string, optional): Repository owner
+    - query (string, optional): Search query
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+search_pull_requests
+  Description: Searches PRs with filtering
+  Parameters:
+    - repo (string, optional): Repository name
+    - owner (string, optional): Repository owner
+    - query (string, optional): Search query
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+search_repositories
+  Description: Discovers repositories
+  Parameters:
+    - query (string, required): Search query
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+    - minimal_output (boolean, optional): Minimal output flag
+
+search_users
+  Description: Locates GitHub users
+  Parameters:
+    - query (string, required): Search query
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+search_orgs
+  Description: Finds organizations
+  Parameters:
+    - query (string, required): Search query
+    - sort (string, optional): Sort field
+    - order (string, optional): Sort order
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+--- Labels ---
+
+get_label
+  Description: Retrieves label properties
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - name (string, required): Label name
+
+list_label
+  Description: Lists repository labels
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+label_write
+  Description: Creates/modifies/deletes labels
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - method (string): create, update, delete
+    - name (string, required): Label name
+    - color (string, optional): Label color
+    - description (string, optional): Label description
+    - new_name (string, optional): Renamed label name
+
+--- Security Advisories ---
+
+get_global_security_advisory
+  Description: Retrieves security advisory
+  Parameters:
+    - ghsaId (string, required): GHSA identifier
+
+list_global_security_advisories
+  Description: Lists security advisories with filtering
+  Parameters:
+    - ghsaId (string, optional): GHSA identifier
+    - cveId (string, optional): CVE identifier
+    - cwes (array, optional): CWE identifiers
+    - ecosystem (string, optional): Package ecosystem
+    - severity (string, optional): Severity level
+
+list_repository_security_advisories
+  Description: Lists repo-specific advisories
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - sort (string, optional): Sort field
+    - state (string, optional): Advisory state
+    - direction (string, optional): Sort direction
+
+list_org_repository_security_advisories
+  Description: Lists organizational advisories
+  Parameters:
+    - org (string, required): Organization name
+    - sort (string, optional): Sort field
+    - state (string, optional): Advisory state
+    - direction (string, optional): Sort direction
+
+--- Projects ---
+
+projects_get
+  Description: Retrieves project resources
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - method (string): get_project, get_project_field, get_project_item, get_project_status_update
+
+projects_list
+  Description: Lists project resources with filtering
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - method (string): list_projects, list_project_fields, list_project_items, list_project_status_updates
+
+projects_write
+  Description: Modifies project items/status
+  Parameters:
+    - repo (string): Repository name
+    - owner (string): Repository owner
+    - method (string): add_project_item, update_project_item, delete_project_item, create_project_status_update
+
+--- User and Organization ---
+
+get_me
+  Description: Retrieves authenticated user profile
+  Parameters: (none)
+
+get_teams
+  Description: Retrieves user team memberships
+  Parameters:
+    - user (string, optional): GitHub username
+
+get_team_members
+  Description: Lists team member usernames
+  Parameters:
+    - org (string, required): Organization name
+    - team_slug (string, required): Team slug
+
+list_branches
+  Description: Lists repository branches
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - page (integer, optional): Page number
+    - perPage (integer, optional): Results per page
+
+--- Copilot ---
+
+get_copilot_job_status
+  Description: Monitors Copilot task progress
+  Parameters:
+    - id (string, required): Job ID
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+
+get_copilot_space
+  Description: Provides context from Copilot spaces
+  Parameters:
+    - name (string, required): Space name
+    - owner (string, required): Organization owner
+
+list_copilot_spaces
+  Description: Lists accessible spaces
+  Parameters: (none)
+
+request_copilot_review
+  Description: Requests automated PR review
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - pullNumber (integer, required): PR number
+
+--- Miscellaneous ---
+
+get_job_logs
+  Description: Retrieves logs for a workflow job
+  Parameters:
+    - repo (string, required): Repository name
+    - owner (string, required): Repository owner
+    - job_id (integer, required): Job ID
+
+github_support_docs_search
+  Description: Searches GitHub documentation
+  Parameters:
+    - query (string, required): Search query
+
+
+================================================================================
+7. GOOGLE DRIVE (20 tools)
+   Server: googledrive | smithery.ai/server/googledrive
+================================================================================
+
+GOOGLEDRIVE_ADD_FILE_SHARING_PREFERENCE
+  Description: Modifies sharing permissions for an existing google drive file, granting a specified role to a user, group, domain, or 'anyone'
+  Parameters:
+    - role (string, required): Permission level. Pattern: ^(owner|organizer|fileOrganizer|writer|commenter|reader)$
+    - type (string, required): Grantee category. Pattern: ^(user|group|domain|anyone)$
+    - file_id (string, required): Unique file identifier
+    - email_address (string|null): Email for user/group grantees
+    - domain (string|null): Domain for domain-type permissions
+
+GOOGLEDRIVE_COPY_FILE
+  Description: Duplicates an existing file in google drive, identified by its file id
+  Parameters:
+    - file_id (string, required): Unique identifier for source file
+    - new_title (string|null): Title for copied file; defaults to "Copy of [original]"
+
+GOOGLEDRIVE_CREATE_COMMENT
+  Description: Create a comment on a file. Use when you need to add a new comment to a specific file
+  Parameters:
+    - file_id (string, required): File identifier
+    - content (string, required): Plain text comment content
+    - anchor (string|null): JSON-formatted document region (e.g., {"type": "line", "line": 12})
+    - quoted_file_content_value (string|null): Quoted text excerpt
+    - quoted_file_content_mime_type (string|null): MIME type of quoted content
+
+GOOGLEDRIVE_CREATE_DRIVE
+  Description: Create a new shared drive for collaboration
+  Parameters:
+    - name (string, required): Shared drive name
+    - requestId (string, required): Unique UUID for idempotent creation
+    - hidden (boolean|null): Hide from default view
+    - themeId (string|null): Theme identifier for background
+    - colorRgb (string|null): Hex color code (e.g., #FF0000)
+    - backgroundImageFile (object|null): Image file with cropping parameters (sub-fields: id, width, xCoordinate, yCoordinate)
+
+GOOGLEDRIVE_CREATE_FILE
+  Description: Creates a new file or folder with metadata. Use to create empty files or folders, or files with content
+  Parameters:
+    - name (string|null): File name
+    - mimeType (string|null): MIME type designation
+    - parents (array|null): Parent folder IDs
+    - starred (boolean|null): Star status
+    - description (string|null): File description
+    - fields (string|null): Comma-separated response fields
+
+GOOGLEDRIVE_CREATE_FILE_FROM_TEXT
+  Description: Creates a new file in google drive from provided text content (up to 10mb), supporting various formats
+  Parameters:
+    - file_name (string, required): Desired file name
+    - text_content (string, required): Plain text content (max 10MB)
+    - mime_type (string, default "text/plain"): Format type for new file
+    - parent_id (string|null): Parent folder identifier
+
+GOOGLEDRIVE_CREATE_FOLDER
+  Description: Creates a new folder in google drive, optionally within a parent folder specified by its id or name
+  Parameters:
+    - folder_name (string, required): Folder name
+    - parent_id (string|null): Parent folder ID or name; omit for root creation
+
+GOOGLEDRIVE_CREATE_REPLY
+  Description: Create a reply to a comment in google drive
+  Parameters:
+    - file_id (string, required): File identifier
+    - comment_id (string, required): Comment identifier
+    - content (string, required): Plain text reply content
+    - action (string|null): Action on parent comment (resolve or reopen)
+    - fields (string|null): Response field selector
+
+GOOGLEDRIVE_CREATE_SHORTCUT_TO_FILE
+  Description: Create a shortcut to a file or folder in google drive
+  Parameters:
+    - name (string, required): Shortcut name
+    - target_id (string, required): ID of target file/folder
+    - target_mime_type (string|null): MIME type of target
+    - includeLabels (string|null): Comma-separated label IDs
+    - supportsAllDrives (boolean|null): Support for shared drives
+    - keepRevisionForever (boolean|null): Preserve head revision
+    - ignoreDefaultVisibility (boolean|null): Override domain defaults
+    - includePermissionsForView (string|null): Additional view permissions
+
+GOOGLEDRIVE_DELETE_COMMENT
+  Description: Deletes a comment from a file
+  Parameters:
+    - file_id (string, required): File identifier
+    - comment_id (string, required): Comment identifier
+
+GOOGLEDRIVE_DELETE_DRIVE
+  Description: Permanently delete a shared drive and its contents
+  Parameters:
+    - driveId (string, required): Shared drive identifier
+    - allowItemDeletion (boolean|null): Delete contents within drive
+    - useDomainAdminAccess (boolean|null): Request as domain administrator
+
+GOOGLEDRIVE_DELETE_PERMISSION
+  Description: Deletes a permission from a file by permission id to revoke access
+  Parameters:
+    - file_id (string, required): File or shared drive identifier
+    - permission_id (string, required): Permission identifier
+    - supportsAllDrives (boolean|null): Support both drive types
+    - useDomainAdminAccess (boolean|null): Domain admin request mode
+
+GOOGLEDRIVE_DELETE_REPLY
+  Description: Delete a specific reply by reply id from a comment
+  Parameters:
+    - file_id (string, required): File identifier
+    - comment_id (string, required): Comment identifier
+    - reply_id (string, required): Reply identifier
+
+GOOGLEDRIVE_DOWNLOAD_FILE
+  Description: Downloads a file from google drive by its id. For Google Workspace documents, optionally exports to specified format
+  Parameters:
+    - file_id (string, required): File identifier for download
+    - mime_type (string|null): Export format for Workspace documents (PDF, DOCX, CSV, etc.)
+
+GOOGLEDRIVE_EDIT_FILE
+  Description: Updates an existing google drive file by overwriting its entire content with new text (max 10mb)
+  Parameters:
+    - file_id (string, required): File identifier to update
+    - content (string, required): New text content (UTF-8, max 10MB)
+    - mime_type (string, default "text/plain"): Content format type
+
+GOOGLEDRIVE_EMPTY_TRASH
+  Description: Permanently delete all of the user's trashed files
+  Parameters:
+    - driveId (string|null): Shared drive identifier for drive-specific trash
+    - enforceSingleParent (boolean|null): Deprecated parameter
+
+GOOGLEDRIVE_FILES_MODIFY_LABELS
+  Description: Modifies the set of labels applied to a file. Returns a list of the labels that were added or modified
+  Parameters:
+    - file_id (string, required): File identifier
+    - label_modifications (array, required): Label modification objects containing label_id (required), remove_label (boolean|null), field_modifications (array|null)
+    - kind (string, default "drive#modifyLabelsRequest"): Request type identifier
+
+GOOGLEDRIVE_FIND_FILE
+  Description: List or search for files and folders in google drive based on query criteria
+  Parameters:
+    - q (string|null): Query filter (Google Drive API query syntax)
+    - spaces (string, default "drive"): Comma-separated spaces to query
+    - corpora (enum|null): Search scope (user, drive, domain, allDrives)
+    - driveId (string|null): Shared drive ID (required if corpora is "drive")
+    - orderBy (string|null): Sort keys and direction
+    - pageSize (integer, default 100, max 1000): Results per page
+    - pageToken (string|null): Pagination token
+    - fields (string, default "*"): Response field selector
+    - supportsAllDrives (boolean, default true): Support both drive types
+    - includeItemsFromAllDrives (boolean, default false): Include all drives in results
+
+GOOGLEDRIVE_FIND_FOLDER
+  Description: Find a folder in google drive by its name and optionally a parent folder
+  Parameters:
+    - name_exact (string|null): Exact folder name (case-sensitive)
+    - name_contains (string|null): Substring in name (case-insensitive)
+    - name_not_contains (string|null): Exclude substring from name
+    - modified_after (string|null): RFC 3339 timestamp filter
+    - starred (boolean|null): Filter by star status
+    - full_text_contains (string|null): Text within folder contents
+    - full_text_not_contains (string|null): Exclude text from contents
+
+GOOGLEDRIVE_GENERATE_IDS
+  Description: Generates a set of file ids which can be provided in create or copy requests
+  Parameters:
+    - type (string|null): Item type for IDs (e.g., files, shortcuts)
+    - count (integer|null, min 1, max 1000): Number of IDs to generate
+    - space (string|null): Space for ID usage (drive or appDataFolder)
+
+
+================================================================================
+SUMMARY
+================================================================================
+
+Service              | Tool Count
+---------------------|----------
+Gmail                | 20
+Google Calendar      | 29
+Slack                | 10
+Linear               | 25
+Perplexity           | 1
+GitHub               | 86
+Google Drive         | 20
+---------------------|----------
+TOTAL                | 191
